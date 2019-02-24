@@ -12,9 +12,12 @@ namespace Game_of_life
 
 		public static void DrawAll  ()
 		{
-			
+			Colony.CountColony();
 			Colony.DrawColony();
-			Colony.ColonyUpdate();
+			Colony.UpdateColony();
+
+			
+			
 		}
 	}
 }

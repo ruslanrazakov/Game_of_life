@@ -15,7 +15,7 @@ namespace Game_of_life
 		public static BufferedGraphics buffer;
 		public int Width { get; set; }
 		public int Height { get; set; }
-		public int universeSize = 5;
+		public int universeSize = 30;
 
 		public GameInit(Form form)
 		{

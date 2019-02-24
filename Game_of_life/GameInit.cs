@@ -15,6 +15,7 @@ namespace Game_of_life
 		public static BufferedGraphics buffer;
 		public int Width { get; set; }
 		public int Height { get; set; }
+		public int universeSize = 5;
 
 		public GameInit(Form form)
 		{
@@ -23,8 +24,8 @@ namespace Game_of_life
 			graphics = form.CreateGraphics();
 			Width = form.ClientSize.Width;
 			Height = form.ClientSize.Height;
-			buffer = context.Allocate(graphics, new Rectangle(0, 0, 150, 150));
-			Logic.SetColony();
+			buffer = context.Allocate(graphics, new Rectangle(0, 0, 300, 300));
+			Colony colony = new Colony(universeSize);
 			Timer timer = new Timer { Interval = 1000};
 			timer.Start();
 			timer.Tick += Timer_tick;
@@ -33,8 +34,8 @@ namespace Game_of_life
 		public void Timer_tick (object sender, EventArgs e)
 		{
 			Debug.WriteLine("Event Timer_tick!");
-
 			Drawing.DrawAll ();
+			buffer.Render();
 		}
 	}
 }

@@ -49,7 +49,7 @@
     <Compile Include="Bacteria.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="GameInit.cs" />
-    <Compile Include="Logic.cs" />
+    <Compile Include="Colony.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

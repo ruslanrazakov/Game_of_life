@@ -11,15 +11,14 @@ namespace Game_of_life
 	class Bacteria
 	{
 		public Point position;
-		public bool isAlive = true;
+		public bool isAlive = false;
 		SolidBrush solidBrush;
-
 
 		public Bacteria(int positionX, int positionY)
 		{
 			position.X = positionX;
 			position.Y = positionY;
-			
+			Debug.WriteLine(position.X.ToString() + " " + position.Y.ToString());
 		}
 
 		public void DrawBacteria()
@@ -30,7 +29,6 @@ namespace Game_of_life
 				solidBrush = new SolidBrush(Color.LightBlue);
 
 			GameInit.buffer.Graphics.FillRectangle(solidBrush, new Rectangle(position.X, position.Y, 10, 10));
-			GameInit.buffer.Render();
 			GameInit.buffer.Graphics.DrawRectangle(Pens.White, position.X, position.Y, 10, 10);
 		}
 	}

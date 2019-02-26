@@ -147,5 +147,6 @@ namespace Game_of_life
 			}
 			
 		}
+
 	}
 }

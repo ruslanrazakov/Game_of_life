@@ -13,8 +13,8 @@ namespace Game_of_life
 		{
 			Form form = new Form
 			{
-				Width = 400,
-				Height = 400
+				Width = 1000,
+				Height = 800
 			};
 			GameInit gameInit = new GameInit(form);
 			form.Show();

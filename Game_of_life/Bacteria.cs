@@ -18,7 +18,7 @@ namespace Game_of_life
 		{
 			position.X = positionX;
 			position.Y = positionY;
-			Debug.WriteLine(position.X.ToString() + " " + position.Y.ToString());
+
 		}
 
 		public void DrawBacteria()

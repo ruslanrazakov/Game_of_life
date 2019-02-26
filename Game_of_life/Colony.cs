@@ -16,6 +16,7 @@ namespace Game_of_life
 
 		public Colony(int universeSize)
 		{
+			
 			_universeSize = universeSize;
 			currentColony = new Bacteria[universeSize,universeSize];
 			nextColony = new Bacteria[universeSize, universeSize];
@@ -67,132 +68,21 @@ namespace Game_of_life
 			currentColony[9, 19].isAlive = true;
 			currentColony[9, 18].isAlive = true;
 			currentColony[9, 17].isAlive = true;
-
-
 		}
 
-		public static void CountColony ()
+
+		public static void ColonyCheck()
 		{
-			int lifeCounter = 0;
 			for (int raws = 0; raws < _universeSize; raws++)
 			{
 				for (int columns = 0; columns < _universeSize; columns++)
 				{
-					if (currentColony[raws, columns].position.X == 0 && currentColony[raws, columns].position.Y == 0)
-					{
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns + 1].isAlive)
-							lifeCounter++;
-
-					}
-					else if (currentColony[raws, columns].position.X == _universeSize * 10 - 10 && currentColony[raws, columns].position.Y == 0)
-					{
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.X == 0 && currentColony[raws, columns].position.Y == _universeSize * 10 - 10)
-					{
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.X == _universeSize * 10 - 10 && currentColony[raws, columns].position.Y == _universeSize * 10 - 10)
-					{
-						if (currentColony[raws - 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.Y == 0)
-					{
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns + 1].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.X == 0)
-					{
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns + 1].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.X == _universeSize * 10 - 10)
-					{
-						if (currentColony[raws - 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-					}
-					else if (currentColony[raws, columns].position.Y == _universeSize * 10 - 10)
-					{
-						if (currentColony[raws - 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-					}
-					else
-					{
-						if (currentColony[raws - 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns - 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns].isAlive)
-							lifeCounter++;
-						if (currentColony[raws - 1, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws, columns + 1].isAlive)
-							lifeCounter++;
-						if (currentColony[raws + 1, columns + 1].isAlive)
-							lifeCounter++;
-					}
-
-					Debug.WriteLine(lifeCounter);
-					if (currentColony[raws, columns].isAlive==false && lifeCounter == 3)
+					int lifeCounter = CountSquare(raws, columns);
+					if (currentColony[raws, columns].isAlive == false && lifeCounter == 3 )
 					{
 						nextColony[raws, columns].isAlive = true;
 					}
-					else if (currentColony[raws, columns].isAlive==true && (lifeCounter==2 || lifeCounter ==3))
+					else if (currentColony[raws, columns].isAlive == true && (lifeCounter == 2 || lifeCounter == 3))
 					{
 						nextColony[raws, columns].isAlive = true;
 					}
@@ -200,17 +90,43 @@ namespace Game_of_life
 					{
 						nextColony[raws, columns].isAlive = false;
 					}
-					lifeCounter = 0;
 				}
 			}
 		}
 
+		public static int CountSquare (int raws, int columns)
+		{
+			int lifeCounter = 0;
+			
+			if (CheckSquare(raws-1, columns-1) && currentColony[raws - 1, columns - 1].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws, columns - 1) && currentColony[raws, columns - 1].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws + 1, columns - 1) && currentColony[raws + 1, columns - 1].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws - 1, columns) && currentColony[raws - 1, columns].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws + 1, columns) && currentColony[raws + 1, columns].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws - 1, columns + 1) && currentColony[raws - 1, columns + 1].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws, columns + 1) && currentColony[raws, columns + 1].isAlive)
+				lifeCounter++;
+			if (CheckSquare(raws + 1, columns + 1) && currentColony[raws + 1, columns + 1].isAlive)
+				lifeCounter++;
+
+			return lifeCounter;
+		}
+
+		public static bool CheckSquare (int x, int y)
+		{
+			return (x >= 0 && x <= _universeSize - 1) && (y >= 0 && y <= _universeSize - 1);
+		}
 
 		public static void DrawColony()
 		{
 			foreach (var bacteria in nextColony)
 				bacteria.DrawBacteria();
-			
 		}
 
 		public static void UpdateColony ()
@@ -229,6 +145,7 @@ namespace Game_of_life
 					nextColony[raws, columns] = new Bacteria(raws * 10, columns * 10);
 				}
 			}
+			
 		}
 	}
 }

@@ -24,11 +24,12 @@ namespace Game_of_life
 			graphics = form.CreateGraphics();
 			Width = form.ClientSize.Width;
 			Height = form.ClientSize.Height;
-			buffer = context.Allocate(graphics, new Rectangle(0, 0, 300, 300));
+			buffer = context.Allocate(graphics, new Rectangle(0, 0, 500, 500));
 			Colony colony = new Colony(universeSize);
-			Timer timer = new Timer { Interval = 1000};
+			Timer timer = new Timer { Interval = 500};
 			timer.Start();
 			timer.Tick += Timer_tick;
+			UI ui = new UI(form, timer, universeSize);
 		}
 
 		public void Timer_tick (object sender, EventArgs e)

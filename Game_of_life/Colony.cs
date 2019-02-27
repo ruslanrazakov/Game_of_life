@@ -42,7 +42,7 @@ namespace Game_of_life
 			currentColony[1, 2].isAlive = true;
 			currentColony[2, 2].isAlive = true;
 
-			//Рисуем каравай
+			/*//Рисуем каравай
 			currentColony[16, 4].isAlive = true;
 			currentColony[17, 3].isAlive = true;
 			currentColony[18, 2].isAlive = true;
@@ -67,7 +67,7 @@ namespace Game_of_life
 			currentColony[9, 20].isAlive = true;
 			currentColony[9, 19].isAlive = true;
 			currentColony[9, 18].isAlive = true;
-			currentColony[9, 17].isAlive = true;
+			currentColony[9, 17].isAlive = true;*/
 		}
 
 

@@ -15,21 +15,23 @@ namespace Game_of_life
 		public static BufferedGraphics buffer;
 		public int Width { get; set; }
 		public int Height { get; set; }
-		public int universeSize = 30;
+		public static int universeSize = 75;
 
 		public GameInit(Form form)
 		{
+			
 			Graphics graphics;
 			context = BufferedGraphicsManager.Current;
 			graphics = form.CreateGraphics();
 			Width = form.ClientSize.Width;
 			Height = form.ClientSize.Height;
 			buffer = context.Allocate(graphics, new Rectangle(0, 0, 1000, 800));
-			Colony colony = new Colony(universeSize);
 			Timer timer = new Timer { Interval = 500};
 			timer.Start();
 			timer.Tick += Timer_tick;
 			UI ui = new UI(form, timer, universeSize);
+			Colony colony = new Colony(universeSize);
+
 		}
 
 		public void Timer_tick (object sender, EventArgs e)

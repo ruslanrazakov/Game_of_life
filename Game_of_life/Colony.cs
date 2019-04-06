@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
-using System.Diagnostics;
-
-namespace Game_of_life
+﻿namespace Game_of_life
 {
 	class Colony
 	{
@@ -16,7 +8,6 @@ namespace Game_of_life
 
 		public Colony(int universeSize)
 		{
-			
 			_universeSize = universeSize;
 			currentColony = new Bacteria[universeSize,universeSize];
 			nextColony = new Bacteria[universeSize, universeSize];
@@ -94,33 +85,41 @@ namespace Game_of_life
 			}
 		}
 
-		public static int CountSquare (int raws, int columns)
+		public  static int CountSquare (int raws, int columns)
 		{
 			int lifeCounter = 0;
-			
-			if (CheckSquare(raws-1, columns-1) && currentColony[raws - 1, columns - 1].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws, columns - 1) && currentColony[raws, columns - 1].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws + 1, columns - 1) && currentColony[raws + 1, columns - 1].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws - 1, columns) && currentColony[raws - 1, columns].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws + 1, columns) && currentColony[raws + 1, columns].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws - 1, columns + 1) && currentColony[raws - 1, columns + 1].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws, columns + 1) && currentColony[raws, columns + 1].isAlive)
-				lifeCounter++;
-			if (CheckSquare(raws + 1, columns + 1) && currentColony[raws + 1, columns + 1].isAlive)
-				lifeCounter++;
+
+			int i, j;
+
+			for (i = 0; i < 3; i++)
+			{
+				for (j = 0; j < 3; j++)
+				{
+					if (IsCellAlive(raws - 1 + i, columns - 1 + j)) lifeCounter++;
+				}
+			}
+
+			if (IsCellAlive(raws, columns)) lifeCounter--;
 
 			return lifeCounter;
 		}
 
-		public static bool CheckSquare (int x, int y)
+		public static bool IsCellAlive (int i, int j)
 		{
-			return (x >= 0 && x <= _universeSize - 1) && (y >= 0 && y <= _universeSize - 1);
+			/* 
+			// Версия 1
+			if (i < 0 || i >= _universeSize || j < 0 || j >= _universeSize)
+			{
+				return (false);
+			}
+			else
+			{
+				return (currentColony[i, j].isAlive);
+			}
+			*/
+
+			// Версия 2
+			return (currentColony [(i + _universeSize)% _universeSize, (j + _universeSize) % _universeSize].isAlive);
 		}
 
 		public static void DrawColony()
@@ -145,8 +144,6 @@ namespace Game_of_life
 					nextColony[raws, columns] = new Bacteria(raws * 10, columns * 10);
 				}
 			}
-			
 		}
-
 	}
 }

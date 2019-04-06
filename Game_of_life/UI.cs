@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 
 namespace Game_of_life
 {
@@ -18,13 +15,19 @@ namespace Game_of_life
 		public static Button clearButton = new Button();
 		public static Label speedLabel = new Label();
 		public static Label infoLabel = new Label();
+		public static Button saveButton = new Button();
+		public static Button loadButton = new Button();
 		Timer _timer;
 		int intervalCounter = 20;
 		Label label = new Label();
 		public static int _universeSize;
 
+		private Form my_form;
+
 		public UI(Form form, Timer timer, int universeSize)
 		{
+			my_form = form;
+
 			_universeSize = universeSize;
 			_timer = timer;
 			SolidBrush backgroundBrush = new SolidBrush(Color.LightGreen);
@@ -36,7 +39,11 @@ namespace Game_of_life
 			AddClearButton(form);
 			AddSpeedLabel(form);
 			AddInfoLabel(form);
+			AddSaveButton(form);
+			AddLoadButton(form);
 			form.MouseClick += Form_MouseClick;
+
+			form.Paint += Form_Paint;
 		}
 
 		private void AddPlayButton(Form form)
@@ -50,7 +57,6 @@ namespace Game_of_life
 			playButton.Text = "Play";
 			playButton.BackColor = Color.FromArgb(50, 0, 0, 0);
 			form.Controls.Add(playButton);
-			
 		}
 
 		private void PlayButton_Click(object sender, EventArgs e)
@@ -71,7 +77,6 @@ namespace Game_of_life
 			stopButton.Text = "Stop";
 			stopButton.BackColor = Color.FromArgb(50, 0, 0, 0);
 			form.Controls.Add(stopButton);
-			
 		}
 
 		private void StopButton_Click(object sender, EventArgs e)
@@ -136,7 +141,7 @@ namespace Game_of_life
 		{
 			clearButton.Click += new EventHandler(ClearButton_Click);
 			clearButton.Size = new Size(150, 25);
-			clearButton.Location = new Point(800, 140);
+			clearButton.Location = new Point(800, 170);
 			clearButton.Font = new Font("Courier", 14F, FontStyle.Bold, GraphicsUnit.Point);
 			clearButton.Name = "ClearButton";
 			clearButton.TabIndex = 4 ;
@@ -152,6 +157,8 @@ namespace Game_of_life
 				for (int columns = 0; columns < _universeSize; columns++)
 				{
 					Colony.currentColony[raws, columns] = new Bacteria(raws * 10, columns * 10);
+					Colony.currentColony[raws, columns].DrawBacteria();
+					my_form.Invalidate();
 				}
 			}
 		}
@@ -159,7 +166,7 @@ namespace Game_of_life
 		private void AddSpeedLabel(Form form)
 		{
 			speedLabel.Size = new Size(150, 25);
-			speedLabel.Location = new Point(800, 170);
+			speedLabel.Location = new Point(800, 140);
 			speedLabel.Font = new Font("Courier", 14F, FontStyle.Italic, GraphicsUnit.Point);
 			speedLabel.Name = "SpeedLabel";
 			speedLabel.Text = "Speed: " + 20;
@@ -178,19 +185,89 @@ namespace Game_of_life
 			form.Controls.Add(infoLabel);
 		}
 
+		private void AddSaveButton(Form form)
+		{
+			saveButton.Click += new EventHandler(SaveButton_Click);
+			saveButton.Size = new Size(150, 25);
+			saveButton.Location = new Point(800, 200);
+			saveButton.Font = new Font("Courier", 14F, FontStyle.Bold, GraphicsUnit.Point);
+			saveButton.Name = "SaveButton";
+			saveButton.TabIndex = 4;
+			saveButton.Text = "Save";
+			saveButton.BackColor = Color.Red;
+			form.Controls.Add(saveButton);
+		}
+
+		private void SaveButton_Click(object sender, EventArgs e)
+		{
+			_timer.Stop();
+			string fileName = Microsoft.VisualBasic.Interaction.InputBox("Name your figure:");
+			SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(Colony.currentColony, _universeSize);
+			saveLoadUniverse.Save(fileName + ".txt");
+		}
+
+		public void AddLoadButton(Form form)
+		{
+			loadButton.Click += new EventHandler(LoadButton_Click);
+			loadButton.Size = new Size(150, 25);
+			loadButton.Location = new Point(800, 230);
+			loadButton.Font = new Font("Courier", 14F, FontStyle.Bold, GraphicsUnit.Point);
+			loadButton.Name = "LoadButton";
+			loadButton.TabIndex = 4;
+			loadButton.Text = "Load";
+			loadButton.BackColor = Color.Red;
+			form.Controls.Add(loadButton);
+		}
+
+		private void LoadButton_Click(object sender, EventArgs e)
+		{
+			_timer.Stop();
+			OpenFileDialog openFileDialog = new OpenFileDialog
+			{
+				DefaultExt = ".txt",
+				Filter = "Text documents (.txt)|*.txt"
+			};
+			openFileDialog.ShowDialog();
+			string fileText = String.Empty;
+			string fileName = openFileDialog.FileName;
+			bool noFile = false;
+			try
+			{
+				fileText = File.ReadAllText(fileName);
+			}
+			catch
+			{
+				noFile = true;
+			}
+			if (!noFile)
+			{
+				SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(Colony.currentColony, _universeSize);
+				saveLoadUniverse.Load(fileText);
+				Debug.WriteLine(fileText);
+			}
+			my_form.Invalidate();
+
+		}
+
 		private void Form_MouseClick(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
 			{
 				if (e.Location.X < _universeSize * 10 && e.Location.Y < _universeSize * 10)
 				{
-					BacteriaRevive(true, e, Color.Red);
+					BacteriaRevive(true, e, Color.Green);
 				}
 			}
 			else
 			{
 				BacteriaRevive(false, e, Color.LightBlue);
 			}
+		}
+		
+		private void Form_Paint (object sender, System.Windows.Forms.PaintEventArgs e)
+		{
+			Debug.WriteLine("Form_Paint!");
+			GameInit.buffer.Render();
 		}
 
 		void BacteriaRevive (bool alive, MouseEventArgs e, Color color)
@@ -199,11 +276,11 @@ namespace Game_of_life
 			int X = (e.Location.X - e.Location.X % 10) / 10;
 			int Y = (e.Location.Y - e.Location.Y % 10) / 10;
 
-			label.Size = new Size(9, 9);
-			label.BackColor = color;
-			label.Location = new Point(X * 10, Y * 10);
-			Form.ActiveForm.Controls.Add(label);
 			Colony.currentColony[X, Y].isAlive = alive;
+			Colony.currentColony[X, Y].DrawBacteria();
+
+			my_form.Invalidate();
+
 			Debug.WriteLine(e.Location.X + " " + e.Location.Y);
 		}
 	}

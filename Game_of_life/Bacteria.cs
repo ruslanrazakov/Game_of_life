@@ -13,7 +13,6 @@ namespace Game_of_life
 		{
 			position.X = positionX;
 			position.Y = positionY;
-
 		}
 
 		public void DrawBacteria()

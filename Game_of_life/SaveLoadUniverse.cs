@@ -6,10 +6,10 @@ namespace Game_of_life
 {
 	class SaveLoadUniverse
 	{
-		public  Bacteria[,] colony;
+		public  Colony colony;
 		public int universeSize;
 
-		public SaveLoadUniverse(Bacteria [,] _colony, int _universeSize)
+		public SaveLoadUniverse(Colony _colony, int _universeSize)
 		{
 			this.colony = _colony;
 			this.universeSize = _universeSize;
@@ -18,12 +18,11 @@ namespace Game_of_life
 		public void Save(string fileName)
 		{
 			string universeState = String.Empty;
-			foreach (Bacteria bacteria in colony)
+			foreach (Bacteria bacteria in colony.currentColony)
 			{
 				if (bacteria.isAlive) universeState += "1";
 				else universeState += "0";
 			}
-			Debug.WriteLine(universeState);
 			StreamWriter sw = new StreamWriter(fileName);
 			sw.Write(universeState);
 			sw.Close();
@@ -39,13 +38,13 @@ namespace Game_of_life
 
 					if (fileText[i] == '1')
 					{
-						Colony.currentColony[raws, columns].isAlive = true;
+						colony.currentColony[raws, columns].isAlive = true;
 					}
 					else
 					{
-						Colony.currentColony[raws, columns].isAlive = false;
+						colony.currentColony[raws, columns].isAlive = false;
 					}
-					Colony.currentColony[raws, columns].DrawBacteria();
+					colony.currentColony[raws, columns].DrawBacteria();
 					i++;
 				}
 			}

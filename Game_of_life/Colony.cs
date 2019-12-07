@@ -3,7 +3,7 @@
 	class Colony
 	{
 		public static  int _universeSize;
-		public static Bacteria [,] currentColony;
+		public Bacteria [,] currentColony;
 		public static Bacteria[,] nextColony;
 
 		public Colony(int universeSize)
@@ -62,13 +62,14 @@
 		}
 
 
-		public static void ColonyCheck()
+		public  void Check()
 		{
 			for (int raws = 0; raws < _universeSize; raws++)
 			{
 				for (int columns = 0; columns < _universeSize; columns++)
 				{
 					int lifeCounter = CountSquare(raws, columns);
+					/*
 					if (currentColony[raws, columns].isAlive == false && lifeCounter == 3 )
 					{
 						nextColony[raws, columns].isAlive = true;
@@ -81,11 +82,19 @@
 					{
 						nextColony[raws, columns].isAlive = false;
 					}
+					*/
+					if (lifeCounter <= 1 || lifeCounter >= 4) nextColony[raws, columns].isAlive = false;
+					else if (lifeCounter == 3) nextColony[raws, columns].isAlive = true;
+					else nextColony[raws, columns].isAlive = currentColony[raws, columns].isAlive;
+					// 0-1 гибнет
+					// 2 не меняется
+					// 3 живет
+					// 4-8 гибнет
 				}
 			}
 		}
 
-		public  static int CountSquare (int raws, int columns)
+		public  int CountSquare (int raws, int columns)
 		{
 			int lifeCounter = 0;
 
@@ -104,7 +113,7 @@
 			return lifeCounter;
 		}
 
-		public static bool IsCellAlive (int i, int j)
+		public bool IsCellAlive (int i, int j)
 		{
 			/* 
 			// Версия 1
@@ -122,13 +131,13 @@
 			return (currentColony [(i + _universeSize)% _universeSize, (j + _universeSize) % _universeSize].isAlive);
 		}
 
-		public static void DrawColony()
+		public void Draw()
 		{
 			foreach (var bacteria in nextColony)
 				bacteria.DrawBacteria();
 		}
 
-		public static void UpdateColony ()
+		public void Update()
 		{
 			for (int raws = 0; raws < _universeSize; raws++)
 			{

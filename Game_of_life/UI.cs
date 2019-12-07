@@ -6,32 +6,44 @@ using System.IO;
 
 namespace Game_of_life
 {
+    /// <summary>
+    /// THis is my first project, that I've made myself, so I wantad to draw all UI elements and events with code, without form designer
+    /// </summary>
 	class UI
 	{
-		public static Button playButton = new Button();
-		public static Button stopButton = new Button();
-		public static Button speedUpButton = new Button();
-		public static Button speedDownButton = new Button();
-		public static Button clearButton = new Button();
-		public static Label speedLabel = new Label();
-		public static Label infoLabel = new Label();
-		public static Button saveButton = new Button();
-		public static Button loadButton = new Button();
-		Timer _timer;
+        
+        #region UI Elements
+        public Button playButton = new Button();
+		public Button stopButton = new Button();
+		public Button speedUpButton = new Button();
+		public Button speedDownButton = new Button();
+		public Button clearButton = new Button();
+		public Label speedLabel = new Label();
+		public Label infoLabel = new Label();
+		public Button saveButton = new Button();
+		public Button loadButton = new Button();
+        Label label = new Label();
+        #endregion 
+
+        Timer _timer;
 		int intervalCounter = 20;
-		Label label = new Label();
-		public static int _universeSize;
 
-		private Form my_form;
+        private Form my_form;
 
-		public UI(Form form, Timer timer, int universeSize)
+        public int _universeSize;
+        public Colony colony;
+
+
+		public UI(Form form, Timer timer, int universeSize, Colony colony)
 		{
 			my_form = form;
-
+            this.colony = colony;
 			_universeSize = universeSize;
+
 			_timer = timer;
 			SolidBrush backgroundBrush = new SolidBrush(Color.LightGreen);
 			GameInit.buffer.Graphics.FillRectangle(backgroundBrush, new Rectangle(0, 0, 1000, 800));
+
 			AddPlayButton(form);
 			AddStopButton(form);
 			AddSpeedUpButton(form);
@@ -41,8 +53,8 @@ namespace Game_of_life
 			AddInfoLabel(form);
 			AddSaveButton(form);
 			AddLoadButton(form);
-			form.MouseClick += Form_MouseClick;
 
+			form.MouseClick += Form_MouseClick;
 			form.Paint += Form_Paint;
 		}
 
@@ -61,7 +73,6 @@ namespace Game_of_life
 
 		private void PlayButton_Click(object sender, EventArgs e)
 		{
-			Debug.WriteLine("Play!");
 			_timer.Start();
 			Form.ActiveForm.Controls.Remove(label);
 		}
@@ -81,7 +92,6 @@ namespace Game_of_life
 
 		private void StopButton_Click(object sender, EventArgs e)
 		{
-			Debug.WriteLine("Stop!");
 			_timer.Stop();
 		}
 
@@ -110,7 +120,6 @@ namespace Game_of_life
 			{
 				_timer.Interval = 50;
 			}
-			Debug.WriteLine(_timer.Interval.ToString());
 		}
 
 		private void AddSpeedDownButton(Form form)
@@ -134,7 +143,6 @@ namespace Game_of_life
 				intervalCounter--;
 				speedLabel.Text = "Speed: " + intervalCounter;
 			}
-			Debug.WriteLine(_timer.Interval.ToString());
 		}
 
 		private void AddClearButton(Form form)
@@ -156,8 +164,8 @@ namespace Game_of_life
 			{
 				for (int columns = 0; columns < _universeSize; columns++)
 				{
-					Colony.currentColony[raws, columns] = new Bacteria(raws * 10, columns * 10);
-					Colony.currentColony[raws, columns].DrawBacteria();
+					colony.currentColony[raws, columns] = new Bacteria(raws * 10, columns * 10);
+					colony.currentColony[raws, columns].DrawBacteria();
 					my_form.Invalidate();
 				}
 			}
@@ -202,7 +210,7 @@ namespace Game_of_life
 		{
 			_timer.Stop();
 			string fileName = Microsoft.VisualBasic.Interaction.InputBox("Name your figure:");
-			SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(Colony.currentColony, _universeSize);
+			SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(colony, _universeSize);
 			saveLoadUniverse.Save(fileName + ".txt");
 		}
 
@@ -241,9 +249,8 @@ namespace Game_of_life
 			}
 			if (!noFile)
 			{
-				SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(Colony.currentColony, _universeSize);
+				SaveLoadUniverse saveLoadUniverse = new SaveLoadUniverse(colony, _universeSize);
 				saveLoadUniverse.Load(fileText);
-				Debug.WriteLine(fileText);
 			}
 			my_form.Invalidate();
 
@@ -276,12 +283,9 @@ namespace Game_of_life
 			int X = (e.Location.X - e.Location.X % 10) / 10;
 			int Y = (e.Location.Y - e.Location.Y % 10) / 10;
 
-			Colony.currentColony[X, Y].isAlive = alive;
-			Colony.currentColony[X, Y].DrawBacteria();
+			colony.currentColony[X, Y].isAlive = alive;
+			colony.currentColony[X, Y].DrawBacteria();
 
-			my_form.Invalidate();
-
-			Debug.WriteLine(e.Location.X + " " + e.Location.Y);
-		}
+			my_form.Invalidate();		}
 	}
 }

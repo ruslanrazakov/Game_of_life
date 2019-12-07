@@ -13,6 +13,5 @@ C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\bin\Debug\Game_of_life.
 C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.csprojAssemblyReference.cache
 C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.Properties.Resources.resources
 C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.csproj.GenerateResource.cache
-C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.csproj.CoreCompileInputs.cache
 C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.exe
 C:\Users\falcon_win\Desktop\C#\Game of life\Game_of_life\obj\Debug\Game_of_life.pdb

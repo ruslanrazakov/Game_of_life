@@ -48,7 +48,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bacteria.cs" />
-    <Compile Include="Drawing.cs" />
     <Compile Include="GameInit.cs" />
     <Compile Include="Colony.cs" />
     <Compile Include="Program.cs" />
